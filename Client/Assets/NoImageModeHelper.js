@@ -40,13 +40,15 @@
   function watchForImages (elem, enabled) {
     var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
-            blockImages(mutation.addedNodes, enabled);
+            for (var i=0; i<mutation.addedNodes.length; i++) {
+                blockImages(mutation.addedNodes.item(i), enabled);
+            }
         });
     });
     // configuration of the observer:
     var config = { childList: true, subtree: true };
     // pass in the target node, as well as the observer options
-    observer.observe(target, config);
+    observer.observe(elem, config);
     observers.push(observer);
   }
 
@@ -66,7 +68,7 @@
     }
   }
 
-  window.addListener("DOMContentLoaded", function (event) {
-    setNoImageMode(isEnabled);
+  window.addEventListener("DOMContentLoaded", function (event) {
+    __firefox__.setNoImageMode(isEnabled);
   });
 })();
